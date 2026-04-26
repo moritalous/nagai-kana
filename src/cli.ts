@@ -7,6 +7,7 @@ const HELP_TEXT = `Usage: nagai-kana <file.md ...> [options]
 
 Options:
   --paper <b5|a4|a3>           Paper size (default: a4)
+  --detail                     Show detailed measurement info
   --help                       Show help`;
 
 const VALID_PAPER_SIZES = ["b5", "a4", "a3"];
@@ -14,6 +15,7 @@ const VALID_PAPER_SIZES = ["b5", "a4", "a3"];
 export interface ParsedArgs {
 	filePaths: string[];
 	paper: PaperSize;
+	detail: boolean;
 	help: boolean;
 }
 
@@ -22,6 +24,7 @@ export function parseArgs(argv: string[]): ParsedArgs {
 	const result: ParsedArgs = {
 		filePaths: [],
 		paper: "a4",
+		detail: false,
 		help: false,
 	};
 
@@ -29,6 +32,8 @@ export function parseArgs(argv: string[]): ParsedArgs {
 		const arg = args[i];
 		if (arg === "--help") {
 			result.help = true;
+		} else if (arg === "--detail") {
+			result.detail = true;
 		} else if (arg === "--paper") {
 			const value = args[++i];
 			if (!value || !VALID_PAPER_SIZES.includes(value)) {
@@ -75,7 +80,12 @@ async function main(): Promise<void> {
 			const result = await countPages(markdown, {
 				paper: parsed.paper,
 			});
-			console.log(JSON.stringify(result));
+			if (parsed.detail) {
+				console.log(JSON.stringify(result));
+			} else {
+				const effectivePages = result.renderHeight / result.contentHeight;
+				console.log(effectivePages);
+			}
 		} else {
 			const counter = await createCounter();
 			try {
@@ -84,7 +94,12 @@ async function main(): Promise<void> {
 					const result = await counter.countPages(markdown, {
 						paper: parsed.paper,
 					});
-					console.log(JSON.stringify(result));
+					if (parsed.detail) {
+						console.log(JSON.stringify(result));
+					} else {
+						const effectivePages = result.renderHeight / result.contentHeight;
+						console.log(effectivePages);
+					}
 				}
 			} finally {
 				counter.close();
