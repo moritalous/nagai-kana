@@ -27,6 +27,7 @@ describe("CLI parseArgs", () => {
 		const r = parseArgs(["bun", "cli"]);
 		expect(r.filePaths).toEqual([]);
 		expect(r.paper).toBe("a4");
+		expect(r.detail).toBe(false);
 		expect(r.help).toBe(false);
 	});
 
@@ -43,6 +44,11 @@ describe("CLI parseArgs", () => {
 	test("--paper flag sets paper size", () => {
 		const r = parseArgs(["bun", "cli", "report.md", "--paper", "b5"]);
 		expect(r.paper).toBe("b5");
+	});
+
+	test("--detail flag sets detail to true", () => {
+		const r = parseArgs(["bun", "cli", "report.md", "--detail"]);
+		expect(r.detail).toBe(true);
 	});
 
 	test("--help flag sets help to true", () => {
@@ -80,5 +86,23 @@ describe("CLI execution", () => {
 		]);
 		expect(exitCode).not.toBe(0);
 		expect(stderr).toContain("letter");
+	});
+
+	test("default output is simple number", async () => {
+		const { stdout, exitCode } = await runCLI([SAMPLE_MD]);
+		expect(exitCode).toBe(0);
+		const output = stdout.trim();
+		expect(Number.isFinite(Number(output))).toBe(true);
+	});
+
+	test("--detail output is JSON", async () => {
+		const { stdout, exitCode } = await runCLI([SAMPLE_MD, "--detail"]);
+		expect(exitCode).toBe(0);
+		const result = JSON.parse(stdout);
+		expect(result).toHaveProperty("pages");
+		expect(result).toHaveProperty("renderHeight");
+		expect(result).toHaveProperty("contentHeight");
+		expect(result).toHaveProperty("lastPageFill");
+		expect(result).toHaveProperty("presets");
 	});
 });
