@@ -3,7 +3,7 @@
   "configVersion": 1,
   "workspaces": {
     "": {
-      "name": "nagai-kana-cli",
+      "name": "nagai-kana",
       "dependencies": {
         "github-markdown-css": "^5.8.1",
       },

@@ -3,7 +3,7 @@
 import type { PaperSize } from "./core";
 import { countPages, createCounter } from "./index";
 
-const HELP_TEXT = `Usage: nagai-kana-cli <file.md ...> [options]
+const HELP_TEXT = `Usage: nagai-kana <file.md ...> [options]
 
 Options:
   --paper <b5|a4|a3>           Paper size (default: a4)

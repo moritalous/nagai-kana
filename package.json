@@ -1,12 +1,12 @@
 {
-	"name": "nagai-kana-cli",
+	"name": "nagai-kana",
 	"version": "0.1.0",
-	"description": "入るかな CLI — Markdownドキュメントのページ数を計測するCLIツール",
+	"description": "nagai-kana",
 	"type": "module",
 	"module": "./src/index.ts",
 	"types": "./src/index.ts",
 	"bin": {
-		"nagai-kana-cli": "./src/cli.ts"
+		"nagai-kana": "./src/cli.ts"
 	},
 	"exports": {
 		".": {
