@@ -211,7 +211,7 @@ async function spawnEdge(
 }
 
 async function openTab(port: number): Promise<string> {
-	const res = await fetch(`http://127.0.0.1:${port}/json/new`);
+	const res = await fetch(`http://127.0.0.1:${port}/json/new`, { method: "PUT" });
 	const { webSocketDebuggerUrl } = (await res.json()) as {
 		webSocketDebuggerUrl: string;
 	};
